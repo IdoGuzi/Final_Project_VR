@@ -1,0 +1,10 @@
+{
+	"alwaysActivate": false,
+	"name" : "DIY_VR",
+	"directory" : "",
+	"resourceOnly" : false,
+	"hmd_presence" :
+	[
+		"*.*"
+	]
+}
