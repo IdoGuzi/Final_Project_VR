@@ -185,6 +185,7 @@ void setup() {
 
     // initialize device
     //Serial.println(F("Initializing I2C devices..."));
+    
     mpu.initialize();
     pinMode(INTERRUPT_PIN, INPUT);
 
@@ -206,8 +207,8 @@ void setup() {
     // make sure it worked (returns 0 if so)
     if (devStatus == 0) {
         // Calibration Time: generate offsets and calibrate our MPU6050
-        mpu.CalibrateAccel(6);
-        mpu.CalibrateGyro(6);
+        mpu.CalibrateAccel(3);
+        mpu.CalibrateGyro(3);
         //mpu.PrintActiveOffsets();
         // turn on the DMP, now that it's ready
         //Serial.println(F("Enabling DMP..."));
@@ -238,6 +239,7 @@ void setup() {
 
     // configure LED for output
     pinMode(LED_PIN, OUTPUT);
+    Serial.println();
 }
 
 
