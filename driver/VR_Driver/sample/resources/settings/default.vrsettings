@@ -1,0 +1,16 @@
+{
+   "driver_sample" : {
+      "port" : "COM3",
+      "enable" : true,
+      "serialNumber" : "prototype_vr",
+      "modelNumber" : "SampleModel 1",
+      "windowX" : 20,
+      "windowY" : 20,
+      "windowHeight" : 800,
+      "windowWidth" : 1600,
+      "renderWidth" : 800,
+      "renderHeight" : 1600,
+      "secondsFromVsyncToPhotons" : 0.11,
+      "displayFrequency" : 60.0
+   }
+}

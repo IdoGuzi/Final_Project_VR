@@ -1,23 +1,21 @@
 #pragma once
 
 #include <openvr_driver.h>
+#include <driverlog.h>
 #include <HeadSetDriver.h>
-using namespace vr;
+#include <ControllerDriver.h>
 
-class HeadsetProvider : public IServerTrackedDeviceProvider {
+
+class HeadSetProvider : public vr::IServerTrackedDeviceProvider{
 private:
-	HeadSetDriver* deviceDriver = nullptr;
-
+	HeadSetDriver* m_pNullHmdLatest = nullptr;
+	CSampleControllerDriver* m_pController = nullptr;
 public:
-
-	/**
-	* adds the object to openvr
-	*/
-	EVRInitError Init(IVRDriverContext* pDriverContext);
-	void Cleanup();
-	void RunFrame();
-	const char* const* GetInterfaceVersions(){ return vr::k_InterfaceVersions; }
-	bool ShouldBlockStandbyMode();
-	void EnterStandby() {}
-	void LeaveStandby() {}
+	virtual vr::EVRInitError Init(vr::IVRDriverContext* pDriverContext);
+	virtual void Cleanup();
+	virtual const char* const* GetInterfaceVersions() { return vr::k_InterfaceVersions; }
+	virtual void RunFrame();
+	virtual bool ShouldBlockStandbyMode() { return false; }
+	virtual void EnterStandby() {}
+	virtual void LeaveStandby() {}
 };

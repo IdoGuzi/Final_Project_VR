@@ -1,37 +1,44 @@
-#include <iostream>
-#include <string>
 #include <HeadSetProvider.h>
-#include <HeadSetDriver.h>
-#include <MpuReader.h>
-#include <driverlog.h>
 
-EVRInitError HeadsetProvider::Init(IVRDriverContext* pDriverContext) {
-	vr::EVRInitError eError = vr::InitServerDriverContext(pDriverContext);
-	if (eError != vr::VRInitError_None) {
-		DriverLog("DIY_VR failed when creating hmd provider\n");
-		return eError;
-	}
-	char port[256];
-	vr::VRSettings()->GetString(k_pch_VR_Section, k_pch_VR_Port_String,port,sizeof(port));
-	this->deviceDriver = new HeadSetDriver(MpuReader(std::string(port)));
-	vr::VRServerDriverHost()->TrackedDeviceAdded(this->deviceDriver->getSerial().c_str(),
-												 vr::TrackedDeviceClass_HMD,
-												 this->deviceDriver
-												);
+
+
+
+
+
+vr::EVRInitError HeadSetProvider::Init(vr::IVRDriverContext* pDriverContext){
+	VR_INIT_SERVER_DRIVER_CONTEXT(pDriverContext);
+	InitDriverLog(vr::VRDriverLog());
+
+	m_pNullHmdLatest = new HeadSetDriver();
+	vr::VRServerDriverHost()->TrackedDeviceAdded(m_pNullHmdLatest->GetSerialNumber().c_str(), vr::TrackedDeviceClass_HMD, m_pNullHmdLatest);
+
+	m_pController = new CSampleControllerDriver();
+	vr::VRServerDriverHost()->TrackedDeviceAdded(m_pController->GetSerialNumber().c_str(), vr::TrackedDeviceClass_Controller, m_pController);
 
 	return vr::VRInitError_None;
 }
 
-void HeadsetProvider::Cleanup() {
-	delete this->deviceDriver;
-	this->deviceDriver = nullptr;
+void HeadSetProvider::Cleanup(){
+	CleanupDriverLog();
+	delete m_pNullHmdLatest;
+	m_pNullHmdLatest = NULL;
+	delete m_pController;
+	m_pController = NULL;
 }
 
-void HeadsetProvider::RunFrame() {
-	this->deviceDriver->runframe();
-}
 
+void HeadSetProvider::RunFrame(){
+	if (m_pNullHmdLatest){
+		m_pNullHmdLatest->RunFrame();
+	}
+	if (m_pController){
+		m_pController->RunFrame();
+	}
 
-bool HeadsetProvider::ShouldBlockStandbyMode() {
-	return false;
+	vr::VREvent_t vrEvent;
+	while (vr::VRServerDriverHost()->PollNextEvent(&vrEvent, sizeof(vrEvent))){
+		if (m_pController){
+			m_pController->ProcessEvent(vrEvent);
+		}
+	}
 }
