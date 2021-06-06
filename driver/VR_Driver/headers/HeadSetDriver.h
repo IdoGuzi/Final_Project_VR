@@ -36,7 +36,7 @@ class HeadSetDriver : public vr::ITrackedDeviceServerDriver, public vr::IVRDispl
 private:
 
 	MpuReader* IMU;
-
+	bool xInvert, yInvert, zInvert;
 	vr::TrackedDeviceIndex_t m_unObjectId;
 	vr::PropertyContainerHandle_t m_ulPropertyContainer;
 

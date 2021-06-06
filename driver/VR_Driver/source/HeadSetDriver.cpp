@@ -7,7 +7,7 @@ HeadSetDriver::HeadSetDriver() {
 	* 
 	*
 	*/
-
+	this->xInvert = this->yInvert = this->zInvert = false;
 	m_unObjectId = vr::k_unTrackedDeviceIndexInvalid;
 	m_ulPropertyContainer = vr::k_ulInvalidPropertyContainer;
 
@@ -162,17 +162,43 @@ vr::DistortionCoordinates_t HeadSetDriver::ComputeDistortion(vr::EVREye eEye, fl
 }
 
 vr::DriverPose_t HeadSetDriver::GetPose() {
-
+	auto temp = IMU->getQuaternion();
+	if (GetAsyncKeyState('O') & 0x0001) {
+		this->xInvert = !this->xInvert;
+	}
+	if (GetAsyncKeyState('I') & 0x0001) {
+		this->yInvert = !this->yInvert;
+	}
+	if (GetAsyncKeyState('P') & 0x0001) {
+		this->zInvert = !this->zInvert;
+	}
 	IMU->read();
 	vr::DriverPose_t pose = { 0 };
 	pose.poseIsValid = true;
 	pose.result = vr::TrackingResult_Running_OK;
 	pose.deviceIsConnected = true;
 
+
+
+	if (this->xInvert) {
+		temp.at(1) *= -1;
+	}
+	if (this->yInvert) {
+		temp.at(2) *= -1;
+	}
+	if (this->zInvert) {
+		temp.at(3) *= -1;
+	}
+	if (GetAsyncKeyState('R') & 0x0001) {
+		IMU->setZero();
+	}
+	auto acc = IMU->getAcceleration();
+	if (acc.at(2) > 2000) {
+		temp.at(3) += 0.03;
+	}
+	pose.qRotation = HmdQuaternion_Init(temp.at(0), temp.at(1), temp.at(2), temp.at(3));
 	pose.qWorldFromDriverRotation = HmdQuaternion_Init(1, 0, 0, 0);
 	pose.qDriverFromHeadRotation = HmdQuaternion_Init(1, 0, 0, 0);
-	auto temp = IMU->getQuaternion();
-	pose.qRotation = HmdQuaternion_Init(temp.at(0), temp.at(1), temp.at(2), temp.at(3));
 	return pose;
 }
 

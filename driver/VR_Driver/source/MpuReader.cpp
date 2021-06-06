@@ -7,7 +7,7 @@
 
 
 MpuReader::MpuReader(std::string port) {
-	this->zero = { 1,0,0,0 };
+	this->zero = { 0,0,0,0 };
 	this->quaternion = { 1,0,0,0 };
 	this->acceleration = { 1,0,0 };
 	//LPCSTR p = (std::string("\\\\.\\") + port).c_str();
@@ -40,7 +40,8 @@ MpuReader::MpuReader(std::string port) {
 
 
 void MpuReader::setZero() {
-	this->zero = this->getQuaternion();
+	const char* reset = "reset"; // size 6 = 5 + 1, 5 letters + '\0' string end symbol
+	bool ok = WriteFile(this->discriptor, &reset, 6, NULL, NULL);
 }
 
 void MpuReader::setQuaternion(std::string str) {
