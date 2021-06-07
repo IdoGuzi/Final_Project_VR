@@ -1,7 +1,7 @@
 # DIY_VR
 this repository is for the final project of my B.Sc in computer science developing vr headset.
 
-In this repository we implement an OpenVR driver  and the firmware ,that sends the headsets input to OpenVR.
+In this repository we implement an based on OpenVR   and the firmware ,that sends the headsets input to OpenVR.
 This input will move the game character. This driver is coded to constantly send forward the HMD input to OpenVR,
 causing the game character to move as we move our head and diplay the scene on the head monitor. 
 
