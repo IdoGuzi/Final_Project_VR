@@ -17,17 +17,17 @@
 
 
 
-HeadSetWatchDog g_watchdogDriverNull;
-HeadSetProvider g_serverDriverNull;
+HeadSetWatchDog g_watchdogDriver;
+HeadSetProvider g_serverDriver;
 
 HMD_DLL_EXPORT void* HmdDriverFactory(const char* pInterfaceName, int* pReturnCode){
 	if (0 == strcmp(vr::IServerTrackedDeviceProvider_Version, pInterfaceName))
 	{
-		return &g_serverDriverNull;
+		return &g_serverDriver;
 	}
 	if (0 == strcmp(vr::IVRWatchdogProvider_Version, pInterfaceName))
 	{
-		return &g_watchdogDriverNull;
+		return &g_watchdogDriver;
 	}
 
 	if (pReturnCode)

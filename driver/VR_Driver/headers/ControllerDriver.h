@@ -8,7 +8,11 @@
 #endif
 
 
-
+/**
+ * this class is a driver for a null controller.
+ * null drivers are needed when an actual controller isn't connected.
+ * in case of adding a controller this class needs to be implemented accordingly.
+ */
 class CSampleControllerDriver : public vr::ITrackedDeviceServerDriver
 {
 public:

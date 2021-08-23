@@ -6,7 +6,9 @@
 #include <windows.h>
 #endif
 
-
+/**
+ * this class watch over the status of the drivers and notify about changes in the driver.
+ */
 class HeadSetWatchDog : public vr::IVRWatchdogProvider{
 public:
 	HeadSetWatchDog(){

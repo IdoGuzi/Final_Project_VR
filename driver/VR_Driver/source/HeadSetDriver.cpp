@@ -203,9 +203,6 @@ vr::DriverPose_t HeadSetDriver::GetPose() {
 }
 
 void HeadSetDriver::RunFrame() {
-	// In a real driver, this should happen from some pose tracking thread.
-	// The RunFrame interval is unspecified and can be very irregular if some other
-	// driver blocks it for some periodic task.
 	if (m_unObjectId != vr::k_unTrackedDeviceIndexInvalid) {
 		vr::VRServerDriverHost()->TrackedDevicePoseUpdated(m_unObjectId, GetPose(), sizeof(vr::DriverPose_t));
 	}
