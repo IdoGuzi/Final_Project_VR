@@ -30,7 +30,7 @@ static const char* const k_pch_Sample_DisplayFrequency_Float = "displayFrequency
  * @param z - the coefficient of the k axis
  * @return vr::HmdQuaternion_t object of quaternion
  */
-inline vr::HmdQuaternion_t HmdQuaternion_Init(double w, double x, double y, double z){
+inline vr::HmdQuaternion_t HmdQuaternion_Init(double w, double x, double y, double z) {
 	vr::HmdQuaternion_t quat;
 	quat.w = w;
 	quat.x = x;
@@ -39,16 +39,20 @@ inline vr::HmdQuaternion_t HmdQuaternion_Init(double w, double x, double y, doub
 	return quat;
 }
 
+
 /**
  * this class represent the object of the headset
  * by inhareting a tracking device and a display
  */
-class HeadSetDriver : public vr::ITrackedDeviceServerDriver, public vr::IVRDisplayComponent{
+class HeadSetDriver : public vr::ITrackedDeviceServerDriver, public vr::IVRDisplayComponent {
 private:
 	//reader to read location of head set
 	MpuReader* IMU;
 	//flip the moment on the axises (in casee of backwords mounted device)
 	bool xInvert, yInvert, zInvert;
+	double pX, pY, pZ;
+
+	vr::VRInputComponentHandle_t buttonEnter;
 
 	vr::TrackedDeviceIndex_t m_unObjectId;
 	vr::PropertyContainerHandle_t m_ulPropertyContainer;
@@ -73,21 +77,23 @@ public:
 
 	/**
 	 * the serial number of a device doesn't matter but needed to work properly
-	 * @returns the serial number of the device 
+	 * @returns the serial number of the device
 	 */
 	std::string GetSerialNumber() const { return m_sSerialNumber; }
+
+
 	/**
 	 * call to getPose with relevent data of the object
 	 */
 	void RunFrame();
-	virtual void PowerOff(){}
+	virtual void PowerOff() {}
 
 	//inhareted from ITracked DeviceServerDriver
 	//https://github.com/ValveSoftware/openvr/wiki/vr::ITrackedDeviceServerDriver-Overview
 
 	virtual vr::EVRInitError Activate(vr::TrackedDeviceIndex_t unObjectId);
-	virtual void Deactivate(){m_unObjectId = vr::k_unTrackedDeviceIndexInvalid;}
-	virtual void EnterStandby(){}
+	virtual void Deactivate() { m_unObjectId = vr::k_unTrackedDeviceIndexInvalid; }
+	virtual void EnterStandby() {}
 	void* GetComponent(const char* pchComponentNameAndVersion);
 	virtual void DebugRequest(const char* pchRequest, char* pchResponseBuffer, uint32_t unResponseBufferSize);
 	virtual vr::DriverPose_t GetPose();
@@ -97,11 +103,10 @@ public:
 	//can be found in "openvr_driver.h"
 
 	virtual void GetWindowBounds(int32_t* pnX, int32_t* pnY, uint32_t* pnWidth, uint32_t* pnHeight);
-	virtual bool IsDisplayOnDesktop(){return true;}
-	virtual bool IsDisplayRealDisplay(){return false;}
+	virtual bool IsDisplayOnDesktop() { return true; }
+	virtual bool IsDisplayRealDisplay() { return false; }
 	virtual void GetRecommendedRenderTargetSize(uint32_t* pnWidth, uint32_t* pnHeight);
 	virtual void GetEyeOutputViewport(vr::EVREye eEye, uint32_t* pnX, uint32_t* pnY, uint32_t* pnWidth, uint32_t* pnHeight);
 	virtual void GetProjectionRaw(vr::EVREye eEye, float* pfLeft, float* pfRight, float* pfTop, float* pfBottom);
 	virtual vr::DistortionCoordinates_t ComputeDistortion(vr::EVREye eEye, float fU, float fV);
-
 };

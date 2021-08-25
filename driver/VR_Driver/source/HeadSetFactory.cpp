@@ -20,6 +20,11 @@
 HeadSetWatchDog g_watchdogDriver;
 HeadSetProvider g_serverDriver;
 
+
+/**
+* this factory function create pointer to an watchdog driver or provider object,
+* steamVR call this function to start using a driver.
+*/
 HMD_DLL_EXPORT void* HmdDriverFactory(const char* pInterfaceName, int* pReturnCode){
 	if (0 == strcmp(vr::IServerTrackedDeviceProvider_Version, pInterfaceName))
 	{

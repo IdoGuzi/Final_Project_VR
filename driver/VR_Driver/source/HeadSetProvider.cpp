@@ -5,7 +5,7 @@
 
 
 
-vr::EVRInitError HeadSetProvider::Init(vr::IVRDriverContext* pDriverContext){
+vr::EVRInitError HeadSetProvider::Init(vr::IVRDriverContext* pDriverContext) {
 	VR_INIT_SERVER_DRIVER_CONTEXT(pDriverContext);
 	InitDriverLog(vr::VRDriverLog());
 
@@ -18,7 +18,7 @@ vr::EVRInitError HeadSetProvider::Init(vr::IVRDriverContext* pDriverContext){
 	return vr::VRInitError_None;
 }
 
-void HeadSetProvider::Cleanup(){
+void HeadSetProvider::Cleanup() {
 	CleanupDriverLog();
 	delete m_pNullHmdLatest;
 	m_pNullHmdLatest = NULL;
@@ -27,17 +27,17 @@ void HeadSetProvider::Cleanup(){
 }
 
 
-void HeadSetProvider::RunFrame(){
-	if (m_pNullHmdLatest){
+void HeadSetProvider::RunFrame() {
+	if (m_pNullHmdLatest) {
 		m_pNullHmdLatest->RunFrame();
 	}
-	if (m_pController){
+	if (m_pController) {
 		m_pController->RunFrame();
 	}
 
 	vr::VREvent_t vrEvent;
-	while (vr::VRServerDriverHost()->PollNextEvent(&vrEvent, sizeof(vrEvent))){
-		if (m_pController){
+	while (vr::VRServerDriverHost()->PollNextEvent(&vrEvent, sizeof(vrEvent))) {
+		if (m_pController) {
 			m_pController->ProcessEvent(vrEvent);
 		}
 	}
