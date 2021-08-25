@@ -10,7 +10,7 @@
                   }
                },
                "mode" : "button",
-               "path" : "/devices/sample/CTRL_1234/input/b"
+               "path" : "/devices/fpvr/CTRL_1234/input/b"
             }
          ]
       },
@@ -26,7 +26,7 @@
                "parameters" : {
                   "sub_mode" : "complex"
                },
-               "path" : "/devices/sample/CTRL_1234/input/a"
+               "path" : "/devices/fpvr/CTRL_1234/input/a"
             }
          ]
       }

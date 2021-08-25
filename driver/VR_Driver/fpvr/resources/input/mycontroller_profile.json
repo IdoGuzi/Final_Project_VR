@@ -1,10 +1,10 @@
 {
 	"jsonid": "input_profile",
-	"legacy_binding": "{sample}/input/legacy_binding_mycontroller.json",
+	"legacy_binding": "{fpvr}/input/legacy_binding_mycontroller.json",
 	"controller_type": "mycontroller",
 	"input_bindingui_mode": "single_device",
 	"input_bindingui_right": {
-		"image": "{sample}/icons/sample_controller.svg"
+		"image": "{fpvr}/icons/sample_controller.svg"
 	},
 	"input_source": {
 		"/input/a": {
