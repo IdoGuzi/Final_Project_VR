@@ -1,4 +1,4 @@
-# DIY_VR
+# Final Projet VR
 this repository is for the final project of my B.Sc in computer science developing vr headset.
 
 In this repository we implement a VR headset based on OpenVR and the firmware for an IMU, that sends the headsets input to OpenVR.
