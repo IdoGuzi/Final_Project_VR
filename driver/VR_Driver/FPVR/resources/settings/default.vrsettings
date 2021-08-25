@@ -1,5 +1,5 @@
 {
-   "driver_sample" : {
+   "driver_FPVR" : {
       "port" : "COM3",
       "enable" : true,
       "serialNumber" : "prototype_vr",

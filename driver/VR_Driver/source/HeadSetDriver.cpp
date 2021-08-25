@@ -2,12 +2,8 @@
 
 
 HeadSetDriver::HeadSetDriver() {
-	/*
-	* fix this!!!!!!!!!!!!!!!!!!!!
-	* 
-	*
-	*/
 	this->xInvert = this->yInvert = this->zInvert = false;
+	this->pX = this->pY = this->pZ = 0;
 	m_unObjectId = vr::k_unTrackedDeviceIndexInvalid;
 	m_ulPropertyContainer = vr::k_ulInvalidPropertyContainer;
 
@@ -100,16 +96,17 @@ vr::EVRInitError HeadSetDriver::Activate(vr::TrackedDeviceIndex_t unObjectId) {
 		vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceAlertLow_String, "{sample}/icons/headset_sample_status_ready_low.png");
 	}
 
+	//button
+	vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/enter/click", &buttonEnter);
+
 	return vr::VRInitError_None;
 }
 
 
-void* HeadSetDriver::GetComponent(const char* pchComponentNameAndVersion){
-	if (!_stricmp(pchComponentNameAndVersion, vr::IVRDisplayComponent_Version)){
+void* HeadSetDriver::GetComponent(const char* pchComponentNameAndVersion) {
+	if (!_stricmp(pchComponentNameAndVersion, vr::IVRDisplayComponent_Version)) {
 		return (vr::IVRDisplayComponent*)this;
 	}
-
-	// override this to add a component to a driver
 	return NULL;
 }
 
@@ -162,6 +159,45 @@ vr::DistortionCoordinates_t HeadSetDriver::ComputeDistortion(vr::EVREye eEye, fl
 }
 
 vr::DriverPose_t HeadSetDriver::GetPose() {
+
+	vr::DriverPose_t pose = { 0 };
+	pose.poseIsValid = true;
+	pose.result = vr::TrackingResult_Running_OK;
+	pose.deviceIsConnected = true;
+
+	//body pos
+	if ((GetAsyncKeyState(VK_UP) & 0x8000) != 0) {
+		pZ += -0.01;
+	}
+	if ((GetAsyncKeyState(VK_DOWN) & 0x8000) != 0) {
+		pZ += 0.01;
+	}
+
+	if ((GetAsyncKeyState(VK_LEFT) & 0x8000) != 0) {
+		pX += -0.01;
+	}
+	if ((GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0) {
+		pX += 0.01;
+	}
+
+	if ((GetAsyncKeyState(VK_PRIOR) & 0x8000) != 0) {
+		pY += 0.01;
+	}
+	if ((GetAsyncKeyState(VK_NEXT) & 0x8000) != 0) {
+		pY += -0.01;
+	}
+
+	if ((GetAsyncKeyState(VK_END) & 0x8000) != 0) {
+		pX = 0;
+		pY = 0;
+		pZ = 0;
+	}
+
+	pose.vecPosition[0] = pX;
+	pose.vecPosition[1] = pY;
+	pose.vecPosition[2] = pZ;
+
+	//head pos
 	auto temp = IMU->getQuaternion();
 	if (GetAsyncKeyState('O') & 0x0001) {
 		this->xInvert = !this->xInvert;
@@ -173,10 +209,6 @@ vr::DriverPose_t HeadSetDriver::GetPose() {
 		this->zInvert = !this->zInvert;
 	}
 	IMU->read();
-	vr::DriverPose_t pose = { 0 };
-	pose.poseIsValid = true;
-	pose.result = vr::TrackingResult_Running_OK;
-	pose.deviceIsConnected = true;
 
 
 
@@ -203,6 +235,7 @@ vr::DriverPose_t HeadSetDriver::GetPose() {
 }
 
 void HeadSetDriver::RunFrame() {
+	vr::VRDriverInput()->UpdateBooleanComponent(buttonEnter, (0x8000 & GetAsyncKeyState(VK_RETURN)) != 0, 0);
 	if (m_unObjectId != vr::k_unTrackedDeviceIndexInvalid) {
 		vr::VRServerDriverHost()->TrackedDevicePoseUpdated(m_unObjectId, GetPose(), sizeof(vr::DriverPose_t));
 	}
