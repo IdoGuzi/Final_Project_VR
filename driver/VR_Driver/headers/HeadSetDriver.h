@@ -9,7 +9,7 @@
 
 
 // keys for use with the settings API
-static const char* const k_pch_Sample_Section = "driver_sample";
+static const char* const k_pch_Sample_Section = "driver_fpvr";
 static const char* const k_pch_Sample_Port = "port";
 static const char* const k_pch_Sample_SerialNumber_String = "serialNumber";
 static const char* const k_pch_Sample_ModelNumber_String = "modelNumber";

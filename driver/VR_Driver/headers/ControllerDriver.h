@@ -48,7 +48,7 @@ public:
 
 		// this file tells the UI what to show the user for binding this controller as well as what default bindings should
 		// be for legacy or other apps
-		vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_InputProfilePath_String, "{sample}/input/mycontroller_profile.json");
+		vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_InputProfilePath_String, "{fpvr}/input/mycontroller_profile.json");
 
 		// create all the input components
 		vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/a/click", &m_compA);
